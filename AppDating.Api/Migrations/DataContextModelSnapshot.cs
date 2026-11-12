@@ -124,26 +124,17 @@ namespace AppDating.Api.Migrations
 
             modelBuilder.Entity("AppDating.Api.Models.User", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Age")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GenderIdentity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Sexe")
-                        .HasColumnType("integer");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
@@ -283,6 +274,83 @@ namespace AppDating.Api.Migrations
                     b.Navigation("ReceiverUser");
 
                     b.Navigation("SourceUser");
+                });
+
+            modelBuilder.Entity("AppDating.Api.Models.User", b =>
+                {
+                    b.OwnsOne("AppDating.Api.Models.UserCredentials", "Credentials", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("Email");
+
+                            b1.Property<byte[]>("PasswordHash")
+                                .IsRequired()
+                                .HasColumnType("bytea")
+                                .HasColumnName("PasswordHash");
+
+                            b1.Property<byte[]>("PasswordSalt")
+                                .IsRequired()
+                                .HasColumnType("bytea")
+                                .HasColumnName("PasswordSalt");
+
+                            b1.HasKey("UserId");
+
+                            b1.HasIndex("Email")
+                                .IsUnique();
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.OwnsOne("AppDating.Api.Models.UserProfile", "Profile", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Age")
+                                .HasColumnType("integer")
+                                .HasColumnName("Age");
+
+                            b1.Property<string>("Bio")
+                                .HasColumnType("text")
+                                .HasColumnName("Bio");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("CreatedAt");
+
+                            b1.Property<DateTime>("DateOfBirth")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("DateOfBirth");
+
+                            b1.Property<int>("GenderIdentity")
+                                .HasColumnType("integer")
+                                .HasColumnName("Gender");
+
+                            b1.Property<int>("Sexe")
+                                .HasColumnType("integer")
+                                .HasColumnName("Sexe");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Credentials")
+                        .IsRequired();
+
+                    b.Navigation("Profile")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AppDating.Api.Models.UserLike", b =>

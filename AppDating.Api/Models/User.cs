@@ -18,8 +18,9 @@ namespace AppDating.Api.Models
 	}
 	public class UserCredentials
 	{
-		public byte[] PasswordHash { get; set; } = new byte[0];
-		public byte[] PasswordSalt { get; set; } = new byte[0];
+		public string Email { get; set; } = string.Empty;
+		public byte[] PasswordHash { get; set; } = [];
+		public byte[] PasswordSalt { get; set; } = [];
 	}
 
 	public class UserProfile

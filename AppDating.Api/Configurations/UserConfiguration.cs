@@ -13,6 +13,8 @@ namespace AppDating.Api.Configurations
 			// Indique à EF Core que ces objets font partie de la même table
 			builder.OwnsOne(u => u.Credentials, creds =>
 			{
+				creds.Property(c => c.Email).HasColumnName("Email").IsRequired();
+				creds.HasIndex(c => c.Email).IsUnique();
 				creds.Property(c => c.PasswordHash).HasColumnName("PasswordHash");
 				creds.Property(c => c.PasswordSalt).HasColumnName("PasswordSalt");
 			});
